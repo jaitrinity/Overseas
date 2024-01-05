@@ -1,0 +1,244 @@
+<!-- <div class="container" style="margin-top:10px"> -->
+<div class="row" style="margin:0px">
+  <div class="col-sm-12" style="background:rgba(233, 6, 6, 0.705);margin-top:5px;margin-bottom:5px;">
+    <label style="color:white; font-size: 16px;padding-top: 4px">DEALER CREATION</label>
+  </div>
+</div>
+<ngx-spinner></ngx-spinner>
+<div class="row" style="margin:0px">
+  <div class="col-sm-12">
+    <form #dealerForm="ngForm" ngNativeValidate (ngSubmit)="saveDealer()" style="border: 1px solid black;padding-top:5px;padding-bottom:5px;margin-bottom:5px">
+      <div class="row" style="margin:0px">
+        <div class="col-sm-5">
+          <div class="row " style="margin:0px">
+            <div class="col-sm-6">
+              <label class="dealerClass">COMPANY NAME *</label>
+            </div>
+            <div class="col-sm-6 form-group" [class.has-error]="dealerNameControl.invalid && dealerNameControl.touched">
+              <input required maxlength="50" type="text" class="form-control input-sm dealerName" name="dealerName" [(ngModel)]="dealer.name" #dealerNameControl="ngModel"
+                (keypress)="nameValidation($event)" style="border-radius:15px" />
+              <span class="help-block" style="color:red" *ngIf="dealerNameControl.invalid && dealerNameControl.touched">Company Name is required</span>
+
+            </div>
+
+          </div>
+          <div class="row" style="margin:0px">
+            <div class="col-sm-6">
+              <label class="dealerClass">CONTACT NUMBER *</label>
+            </div>
+
+            <div class="col-sm-6 form-group" [class.has-error]="dealerContactControl.invalid && dealerContactControl.touched" [class.has-success]="dealerContactControl.valid">
+              <input type="text" required class="form-control input-sm dealerContact" name="dealerContactNumber" [(ngModel)]="dealer.contactNumber"
+                #dealerContactControl="ngModel" (keypress)="contactNumberValidation($event)" style="border-radius:15px" />
+              <span class="help-block" style="color:red" *ngIf="dealerContactControl.invalid && dealerContactControl.touched">Contact Number is required</span>
+              <!-- <span id="contactSpanId" *ngIf = "contactSpanVar">Only digits are allowed</span> -->
+            </div>
+          </div>
+          <div class="row" style="margin:0px">
+            <div class="col-sm-6 ">
+              <label class="dealerClass">FAX NUMBER</label>
+            </div>
+            <div class="col-sm-6 form-group">
+              <input type="text" class="form-control input-sm faxNo" name="dealerFaxNumber" [(ngModel)]="dealer.faxNumber" style="border-radius:15px" />
+            </div>
+          </div>
+            
+          <div class="row" style="margin:0px">
+              <div class="col-sm-6">
+                <label class="dealerClass">EMAIL ID *</label>
+              </div>
+              <div class="col-sm-6 form-group" [class.has-error]="EmailControl.invalid && EmailControl.touched" [class.has-success]="EmailControl.valid">
+                <input type="text" required class="form-control input-sm emailId" name="dealerEmailId" [(ngModel)]="dealer.emailId" #EmailControl="ngModel"
+                  (keypress)="emailValidation($event)" style="border-radius:15px" />
+                <span class="help-block" style="color:red" *ngIf="EmailControl.invalid && EmailControl.touched">
+                  Email Id is required</span>
+              </div>
+            </div>
+
+          <div class="row" style="margin:0px">
+            <div class="col-sm-6">
+              <label class="dealerClass">DEALER CODE</label>
+            </div>
+            <div class="col-sm-6 form-group">
+              <input type="text" class="form-control input-sm dealerCode" name="dealerCode" [(ngModel)]="dealer.code" style="border-radius:15px" />
+            </div>
+          </div>
+          
+          <div class="row" style="margin:0px">
+              <div class="col-sm-6">
+                <label class="dealerClass">LOGO</label>
+              </div>
+              <div class="col-sm-6 form-group">
+                <input type="file" id="logoId" class="form-control " name="logo" ngModel (change)="validatelogo($event)" style="border-radius:15px" />
+              </div>
+            </div>
+
+          <div class="row" style="margin:0px">
+            <div class="col-sm-6">
+              <label class="dealerClass">DEALER TYPE * </label>
+            </div>
+            <div class="col-sm-6 form-group">
+              <label class="radio-inline dealerClass">
+                <input type="radio" class="buyer" required value="BUYER" name="dealerType" [(ngModel)]="dealer.type">BUYER
+              </label>
+              <label class="radio-inline dealerClass">
+                <input type="radio"  class = "consignee" required value="CONSIGNEE" name="dealerType" [(ngModel)]="dealer.type">CONSIGNEE
+              </label>
+            </div>
+          </div>
+          
+        </div>
+        <div class="col-sm-2">
+            
+        </div>
+        <div class="col-sm-5">
+            <div class="row" style="margin:0px">
+                <div class="col-sm-6">
+                  <label class="dealerClass">ADDRESS1 *</label>
+                </div>
+                <div class="col-sm-6 form-group" [class.has-error]="dealerAddress1Control.invalid && dealerAddress1Control.touched" [class.has-success]="dealerAddress1Control.valid">
+                  <input type="text" required class="form-control input-sm address1" name="dealerAddress1" [(ngModel)]="dealer.address1" #dealerAddress1Control="ngModel"
+                  (keypress)="addressValidation($event)"  style="border-radius:15px" />
+                  <span class="help-block" style="color:red" *ngIf="dealerAddress1Control.invalid && dealerAddress1Control.touched">
+                      Address1 is required</span>
+                </div>
+              </div>
+
+          <div class="row" style="margin:0px">
+            <div class="col-sm-6">
+              <label class="dealerClass">ADDRESS2 *</label>
+            </div>
+            <div class="col-sm-6 form-group" [class.has-error]="dealerAddress2Control.invalid && dealerAddress2Control.touched" [class.has-success]="dealerAddress2Control.valid">
+              <input type="text" required class="form-control input-sm address2" name="dealerAddress2" [(ngModel)]="dealer.address2" #dealerAddress2Control="ngModel"
+              (keypress)="addressValidation($event)" style="border-radius:15px"/>
+              <span class="help-block" style="color:red" *ngIf="dealerAddress2Control.invalid && dealerAddress2Control.touched">
+                  Address2 is required</span>
+            </div>
+          </div>
+
+          
+          <div class="row" style="margin:0px">
+            <div class="col-sm-6">
+              <label class="dealerClass">CITY *</label>
+            </div>
+            <div class="col-sm-6 form-group" [class.has-error]="dealerCityControl.invalid && dealerCityControl.touched" [class.has-success]="dealerCityControl.valid">
+              <input type="text" required class="form-control input-sm city" name="dealerCity" [(ngModel)]="dealer.city" #dealerCityControl="ngModel"
+                (keypress)="cityValidation($event)"  style="border-radius:15px" />
+              <span class="help-block" style="color:red" *ngIf="dealerCityControl.invalid && dealerCityControl.touched">
+                City is required</span>
+            </div>
+          </div>
+          <div class="row" style="margin:0px">
+            <div class="col-sm-6">
+              <label class="dealerClass">STATE</label>
+            </div>
+            <div class="col-sm-6 form-group">
+              <input type="text" class="form-control input-sm state" name="dealerState" [(ngModel)]="dealer.state"
+                (keypress)="stateValidation($event)" style="border-radius:15px" />
+              
+            </div>
+          </div>
+            
+          <div class="row" style="margin:0px">
+              <div class="col-sm-6">
+                <label class="dealerClass">COUNTRY * </label>
+              </div>
+              <div class="col-sm-6 form-group" [class.has-error]="dealerCountryControl.invalid && dealerCountryControl.touched" [class.has-success]="dealerCountryControl.valid">
+                <select required class="form-control input-sm country" name="dealerCountry" [(ngModel)]="dealer.country" #dealerCountryControl="ngModel" style="border-radius:15px" >
+                  <option selected value="" [disabled] = true >Select Country</option>
+                  <option *ngFor = "let c of countrylist">{{c.countryName}} <input type="hidden" [value]="c.countryCode"/></option>
+                  
+                </select>
+                <span style="color:red" *ngIf="dealerCountryControl.invalid && dealerCountryControl.touched">Country is required</span>
+              </div>
+            </div>
+         
+            <div class="row" style="margin:0px">
+              <div class="col-sm-6">
+                <label class="dealerClass">ZIP CODE</label>
+              </div>
+              <div class="col-sm-6 form-group" >
+                <input type="text"  class="form-control input-sm zipCode" name="dealerZipCode" [(ngModel)]="dealer.zipCode"
+                (keypress)="zipCodeValidation($event)" style="border-radius:15px" />
+                
+              </div>
+            </div>
+          
+
+          <div class="row" style="margin:0px">
+             
+            <div class="col-sm-6" *ngIf="submitButtonStatus == true">
+              <button id="submitBtn"  type="submit" style="width:60%;border-radius:15px" class='btn btn-primary'>Submit</button>
+            </div>
+            <div class="col-sm-6" *ngIf="updateButtonStatus == true">
+                  <button type = "submit" id="updateBtn" style="width:60%;border-radius:15px"  class="btn btn-info">Update</button>
+            </div>
+            <div class="col-sm-6">
+              <button type="reset" id="cancelBtnId" style="width:60%;border-radius:15px" class='btn btn-primary' (click)="onCancel()"> Cancel</button>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </form>
+  </div>
+</div>
+<!-- </div> -->
+<!-- //////////////////////////View Dealer -->
+<!-- <div class="container"> -->
+<div class="row" style="margin:0px">
+
+  <div class="col-sm-12" style="background:rgba(233, 6, 6, 0.705);margin-top:5px;margin-bottom:5px;">
+    <label style="color:white; font-size: 16px;padding-top: 4px">CREATED DEALER</label>
+  </div>
+  <div class="col-sm-12">
+    <!-- <div class="input-group">
+            <input type="text" class="form-control" />
+            <span class="input-group-addon">
+              <i class="fa fa-search"></i>
+            </span>
+          </div> -->
+
+    <button (click)="exportDealer()" style="width:12%;float:right;margin-bottom:5px;border-radius:15px" class='btn btn-primary'>Export</button>
+
+  </div>
+
+</div>
+
+<div class="row" style="margin:0px">
+  <div>
+    <!-- style="max-height: 500px;overflow: auto" -->
+    <!-- <ngx-spinner></ngx-spinner> -->
+
+    <!-- <table class="table" >
+          <tr>
+            <th  class="text-center" style = "border: 1px solid black">Sr No</th>
+            <th  class="text-center" style = "border: 1px solid black">Dealer Name</th>
+            <th  class="text-center" style = "border: 1px solid black">Country</th>
+            <th  class="text-center" style = "border: 1px solid black">Phone No</th>
+            <th  class="text-center" style = "border: 1px solid black">Email Id</th>
+            <th  class="text-center" style = "border: 1px solid black">Address</th>
+            <th  class="text-center" style = "border: 1px solid black">Active</th>
+          </tr>
+          <tr *ngFor = "let d of dealerlist |  paginate: config">
+              <td  class="text-center" style = "border: 1px solid black">{{d.srNo}}</td>
+              <td  class="text-center" style = "border: 1px solid black">{{d.dealerName}}</td>
+              <td  class="text-center" style = "border: 1px solid black">{{d.country}}</td>
+              <td  class="text-center" style = "border: 1px solid black">{{d.phoneNo}}</td>
+              <td  class="text-center" style = "border: 1px solid black">{{d.emailId}}</td>
+              <td  class="text-center" style = "border: 1px solid black">{{d.address}}</td>
+              <td  class="text-center" style = "border: 1px solid black">{{d.active}}</td>
+            </tr>
+        </table> -->
+    <ng2-smart-table [settings]="settings" [source]="dealerlist"  (custom)="onEdit($event)" (delete)= "onDelete($event)">
+    </ng2-smart-table>
+    <div class="text-center">
+      <img class='loaderClass ' src="assets/images/loader.gif" />
+    </div>
+  </div>
+</div>
+<!-- <div style="text-align: center; margin-top:40px !important">
+          <pagination-controls (pageChange)="pageChanged($event)"></pagination-controls>
+      </div> -->
+<!-- </div> -->

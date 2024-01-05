@@ -1,0 +1,41 @@
+<!-- <style>
+	body {
+		background: url('http://in3.co.in:4125/HSILPortal/Login/hsil_bg_image.jpg');
+		background-repeat: no-repeat;
+		background-size: 100% 100%;
+	}
+</style> -->
+<body style="height:650px;">
+<div style="padding-top:150px;margin-left:550px;width:25%">
+
+	<!-- <div style=" background-color:white;text-align: center">
+		<img src="assets/images/hsil_logo.png" />
+
+	</div> -->
+	<form #employeeForm="ngForm" (ngSubmit)="login()">
+
+		<div style="margin-top:20px">
+			<input class="form-control" type="text" placeholder="Enter Login Id" name="empId" [(ngModel)]="empId" style="margin-bottom :20px;width :100%;padding-top:15px;padding-bottom:15px;text-align: center;"
+			/>
+		</div>
+		<div>
+			<input class="form-control" type="password" placeholder="Enter Password" name="empPwd" [(ngModel)]="empPwd" style="margin-bottom : 20px;width : 100%;padding-top:15px;padding-bottom:15px;text-align: center;"
+			/>
+		</div>
+		<div>
+			<button type="submit" class="btn btn-primary" style="margin-bottom : 40px;width : 100%;background-color: black;color: white;padding-top:8px;padding-bottom:8px">
+				Login
+			</button>
+
+		</div>
+	</form>
+
+</div>
+
+<div>
+	<ngx-spinner></ngx-spinner>
+	<!-- <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-scale-multiple">
+		<p style="font-size: 20px; color: white">Loading...</p>
+	</ngx-spinner> -->
+</div>
+</body>	

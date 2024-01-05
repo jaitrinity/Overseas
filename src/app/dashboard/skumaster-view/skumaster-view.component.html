@@ -1,0 +1,88 @@
+<!-- <div class="container" style="margin-top:10px"> -->
+<div class="row" style="margin:0px">
+  <div class="col-sm-12 titleDivClass" style="background:rgba(233, 6, 6, 0.705);margin-top:5px;margin-bottom:5px;padding-top:2px;">
+      <label style="color:white; font-size: 16px;padding-top: 4px">UPLOAD SKU </label>
+  </div>
+  <!-- <div class="row" style="margin:10px">
+    <div class="col-sm-2">
+      <label>Product Image</label>
+    </div>
+    <div class="col-sm-2">
+      <input type="file" class="form-control" name="productFile" [(ngModel)]="productFile" (change)="getProductFile($event)">
+    </div>
+    <div class="col-sm-2">
+      <button style="width:150px;border-radius:15px" (click)="uploadProductImage()" class="btn btn-primary">Upload</button>
+    </div>
+    <div class="col-sm-1">
+      <label>Line Drawing</label>
+    </div>
+    <div class="col-sm-2">
+      <input type="file" class="form-control" name="lineFile" [(ngModel)]="lineFile" (change)="getLineFile($event)">
+    </div>
+    <div class="col-sm-2">
+      <button style="width:150px;border-radius:15px" (click)="uploadLineImage()" class="btn btn-primary">Upload</button>
+    </div>
+  </div> -->
+  <div class="row" style="margin:10px">
+    <div class="col-sm-2">
+      <label>Sku Excel File</label>
+    </div>
+    <div class="col-sm-2">
+      <input type="file" class="form-control" name="skuFile" ngModel (change)="getFiles($event)">
+    </div>
+    <div class="col-sm-1">
+      <button style="width:150px;border-radius:15px" (click)="uploadSkuMaster()" class="btn btn-primary">Upload</button>
+    </div>
+    <div class="col-sm-2" style="margin-left:35px">
+      <button (click)="downloadSkuFormat()" class="btn btn-primary" style="border-radius:15px">Download Format</button>
+    </div>
+  </div>
+</div>
+<!-- </div> -->
+<br>
+<!-- <div class="container">   -->
+<div class="row" style="margin:0px">
+  <div class="col-sm-12" style="background:rgba(233, 6, 6, 0.705);margin-top:5px;margin-bottom:5px;padding-top:2px;">
+    <label style="color:white; font-size: 16px;padding-top: 4px">VIEW SKU</label>
+  </div>
+  <!-- <div class="col-sm-2">
+   
+  </div> -->
+  <div class="col-sm-12">
+    <button style="width:150px;float:right;border-radius:15px" (click)="exportSku()" class="btn btn-primary" >Export</button>
+  </div>
+</div>
+<div class="col-sm-12" style="overflow:auto" >
+  <div class="row" style="margin:0px">
+    <!--  style="max-height: 500px;overflow: auto; -->
+    <ngx-spinner></ngx-spinner>
+    <!-- <table class="table" style="border:1px solid black">
+          <tr >
+            <th class="text-center" style = "width:10%;border: 1px solid black">SKU No</th>
+            <th class="text-center" style = "width:10%;border: 1px solid black">Item Code</th>
+            <th class="text-center" style = "width:10%;border: 1px solid black">Cat Code</th>
+            <th class="text-center" style = "width:10%;border: 1px solid black">Item Desc</th>
+            <th class="text-center" style = "width:10%;border: 1px solid black">Item Name</th>
+            <th class="text-center" style = "width:10%;border: 1px solid black">Price in $</th>
+           
+          </tr>
+          <tr *ngFor = "let sku of skulist |  paginate: config">
+              <td class="text-center" style = "width:10%;border: 1px solid black">{{sku.skuNo}}</td>
+              <td class="text-center" style = "width:10%;border: 1px solid black">{{sku.itemCode}}</td>
+              <td class="text-center" style = "width:10%;border: 1px solid black">{{sku.categoryCode}}</td>
+              <td class="text-center" style = "width:10%;border: 1px solid black">{{sku.itemDesc}}</td>
+              <td class="text-center" style = "width:10%;border: 1px solid black">{{sku.itemName}}</td>
+              <td class="text-center" style = "width:10%;border: 1px solid black">{{sku.price}}</td>
+          </tr>
+        </table> -->
+    <ng2-smart-table class="form-control" [settings]="settings1" [source]="skulist" (editConfirm)="onEdit($event)" (deleteConfirm)="onDelete($event)">
+    </ng2-smart-table>
+    <div class="text-center">
+        <img class  = 'loaderClass ' src="assets/images/loader.gif" />
+    </div>
+  </div>
+  <!-- <div class="col-sm-12" style="text-align: center; margin-top:40px ">
+          <pagination-controls (pageChange)="pageChanged($event)"></pagination-controls>
+          </div> -->
+</div>
+<!-- </div> -->

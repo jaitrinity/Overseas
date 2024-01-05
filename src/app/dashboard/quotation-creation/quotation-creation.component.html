@@ -1,0 +1,662 @@
+<div class="row" style="margin:0px">
+  <div class="col-sm-12" style="background:rgba(233, 6, 6, 0.705);margin-top:5px;margin-bottom:5px;">
+    <label style="color:rgb(245, 239, 239); font-size: 16px;padding-top: 4px">QUOTATION CREATION</label>
+  </div>
+</div>
+
+<div class="col-sm-12" style="margin-left:5px;">
+  <div class="row" style="margin:0px">
+    <div class="form-inline">
+      <label class="quotationClass"  style="width:15%">FROM*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="text" [disabled]=true class="form-control" id="toId" style="height:40%;font-size:12px;border-radius:10px;">
+      </label>
+      <label class="quotationClass" style="width:15%">TO*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <div class="dropdown">
+            <input class="form-control" style="height:40%;width:100%;font-size:12px;border-radius:10px;" type="text" placeholder="Search.." id="myInput" (keyup)="filterFunction()">
+            <div id="myDropdown" class="dropdown-content">
+              <a (click)="setInputValue(d.dealerName,d.srNo)" *ngFor="let d of dealerList">{{d.dealerName}}</a>
+  
+            </div>
+          </div>
+        </label>
+      <label class="quotationClass" style="width:15%">ISSUED BY*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="text" class="form-control" id="issuedBy" style="height:40%;font-size:12px;border-radius:10px;">
+      </label>
+      <label class="quotationClass" style="width:15%">PROJECT STATUS*
+        <select class="form-control" id="projectStatus" style="width:100%;font-size:12px;border-radius:10px;height:40%">
+          <option style="font-size:12px" *ngFor="let ps of projectStatusList" >{{ps.value}}</option>
+        </select>
+      </label>
+      <label class="quotationClass" style="width:15%">QUOTATION DATE* &nbsp;
+          <i class="fa fa-refresh quotationClass" style="cursor: pointer; text-decoration: none;" (click)="removeDate('quotationDate')"></i>&nbsp;
+          <!-- <input id="quotationDate" type="date" class="form-control" style="height:30px;font-size:12px;border-radius:10px;width:100%"> -->
+          <input id="quotationDate" type='text' class="form-control" placeholder="YYYY-MM-DD" style="height:30px;font-size:12px;border-radius:10px;width:100%"
+           bsDatepicker [bsConfig]='datePickerConfig' />
+        </label>
+      
+      <label class="quotationClass" style="width:15%">QUOTATION DEADLINE* 
+        <select style="font-size:12px;border-radius:10px;height:40%;width:100%" class="form-control"  name="isDate" [(ngModel)]="isDate" (change)="chooseDate()" >
+          <option style="font-size:12px" value='Y'>Choose Date</option>
+          <option style="font-size:12px" value='N'>NA</option>
+        </select>
+      </label>
+      <label class="quotationClass" style="width:10%" *ngIf="isDate == 'Y'">
+          <i class="fa fa-refresh quotationClass" style="cursor: pointer; text-decoration: none;" (click)="removeDate('projectEndDateId')"></i>&nbsp;
+          <!-- <input id="projectEndDateId" type="date" class="form-control" style="height:30px;font-size:11px;border-radius:10px;width:100%"> -->
+          <input id="projectEndDateId" type='text' class="form-control" placeholder="YYYY-MM-DD" style="height:30px;font-size:11px;border-radius:10px;width:100%"
+          bsDatepicker [bsConfig]='datePickerConfig' />
+        </label>
+      
+    </div>
+  </div>
+</div>
+<div class="col-sm-12" style="margin-left:5px;">
+  <div class="row" style="margin:0px">
+    <div class = "form-inline">
+      
+      <label class="quotationClass" style="width:15%">CONTACT NUMBER&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="text" class="form-control" id="contact" (keypress)="contactValidation($event)" style="height:40%;font-size:12px;border-radius:10px;">
+      </label>
+      <label class="quotationClass" style="width:15%">CURRENCY*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <!-- <select id="currId" class="form-control" style="width:80%">
+          <option selected [disabled]=true>Select Currency</option>
+          <option [value]="cur.abbr" *ngFor="let cur of currencyList">{{cur.value}}</option>
+        </select> -->
+        <div class="dropdown1">
+          <input class="form-control" style="height:40%;width:100%;font-size:12px;border-radius:10px;" type="text" placeholder="Search.." id="currId" (keyup)="filterFunction1()">
+          <div id="myDropdown1" class="dropdown-content1">
+            <a (click)="setInputValue1(cur.id,cur.value)" *ngFor="let cur of currencyList">{{cur.value}}</a>
+
+          </div>
+        </div>
+      </label>
+      
+    </div>
+  </div>
+</div>
+
+<div class="col-sm-12" style="height:250px; overflow:auto">
+  <ng2-smart-table [settings]="settings" [source]="dealerSkuDetails" (custom)="onCustomAction($event)">
+  </ng2-smart-table>
+</div>
+
+<div class="col-sm-12" style="background:rgba(233, 6, 6, 0.705);margin-top:5px;margin-bottom:5px;">
+  <label style="color:white; font-size: 16px;padding-top: 4px">SELECTED ITEMS: {{selectedItems.length}}</label>
+</div>
+<div class="col-sm-12">
+  <div class=" col-sm-6 form-inline" style="margin-bottom:5px">
+    <input id="bulkUploadQId" type="file" class="form-control" name="bulkUploadFile" ngModel (change)="getBulkUploadFile($event)"
+    />
+    <input type="button" value="Quotation Upload" class="form-control btn btn-primary" (click)="bulkUploadQuotation()" style="border-radius:15px;margin-right:5px" />
+    <input type="button" value="Download Format" class="form-control btn btn-primary" (click)="downloadFormatQuotation()" style="border-radius:15px"/>
+  </div>
+  <!-- <div class="col-sm-6" *ngIf="selectedItems.length!=0">
+      <input type="button" (click)="saveDraftSelectedItems()" style="width:20%;float:right;border-radius:15px" value="Save As Draft" class="form-control btn btn-primary"
+      />
+  </div> -->
+  
+   
+  <table class="table" style="font-size:12px;margin:0px" border="1px">
+    <tr *ngIf="selectedItems.length != 0" style="background-color:#c2dceb">
+      <th>
+        <span>ACTIONS</span>
+      </th>
+      <th>
+        <span>S.NO.</span>
+      </th>
+      <th>
+        <span>REFERENCE NUMBER</span>
+      </th>
+      <th *ngFor="let h of dealerSkuSelectedCol">
+        <span>{{h.skuDisplayName}}</span>
+      </th>
+      <th>
+        <span>QUANTITY</span>
+      </th>
+      <th style="width: 13%">
+        <span>TOTAL AMOUNT</span>
+      </th>
+    </tr>
+    <tr style="background-color:#eaeff2" *ngFor='let i of selectedItems;let ind = index' class="i.item1">
+      <td >
+        <span (click)="removeSelectedItem(ind)" style="cursor:pointer" title="Delete">
+          <i class="fa fa-minus"></i>
+        </span>
+      </td>
+      <td>
+        <span>{{(ind+1)}}</span>
+      </td>
+      <td >
+        <input class="ref_{{ind}}"  type="text" style="width:100px"  [value]="i.ref" [(ngModel)]="i.ref"/>
+      </td>
+      <td *ngIf="1 < dealerSkuColSize && i.isQuotationSelected1 == 'Y' && i.isCfr1 == 'N'">
+        <span *ngIf="i.isImgItem1 =='N'">{{i.item1}}</span>
+        <img *ngIf="i.isImgItem1 =='Y'" [src]="i.item1" width="30px" height="30px">
+      </td>
+      <td *ngIf="1 < dealerSkuColSize && i.isQuotationSelected1 == 'Y' && i.isCfr1 == 'Y'">
+        <input *ngIf="i.isImgItem1 =='N'" type='text' [(ngModel)]="i.cfrAmountManual" (keyup)="calculateAmountOnCfrManual(ind)" (keypress) = "validatecfrAmount($event)" />
+        <span *ngIf="i.isImgItem1 =='N'" id="cfrspan_{{ind}}" class="cfrspan" style="color:red;display:none" >Price required</span>
+      </td>
+      <td *ngIf="2 < dealerSkuColSize && i.isQuotationSelected2 == 'Y' && i.isCfr2 == 'N'">
+        <span *ngIf="i.isImgItem2 =='N'">{{i.item2}}</span>
+        <img *ngIf="i.isImgItem2 =='Y'" [src]="i.item2" width="30px" height="30px">
+      </td>
+      <td *ngIf="2 < dealerSkuColSize && i.isQuotationSelected2 == 'Y' && i.isCfr2 == 'Y'">
+        <input *ngIf="i.isImgItem2 =='N'" type='text' [(ngModel)]="i.cfrAmountManual" (keyup)="calculateAmountOnCfrManual(ind)" (keypress) = "validatecfrAmount($event)" />
+        <img *ngIf="i.isImgItem2 =='Y'" [src]="i.item2" width="30px" height="30px">
+        <span *ngIf="i.isImgItem2 =='N'" id="cfrspan_{{ind}}" class="cfrspan" style="color:red;display:none" >Price required</span>
+      </td>
+      <td *ngIf="3 < dealerSkuColSize && i.isQuotationSelected3 == 'Y' && i.isCfr3 == 'N'" >
+        <span *ngIf="i.isImgItem3 =='N'">{{i.item3}}</span>
+        <img *ngIf="i.isImgItem3 =='Y'" [src]="i.item3" width="30px" height="30px">
+      </td>
+      <td *ngIf="3 < dealerSkuColSize && i.isQuotationSelected3 == 'Y' && i.isCfr3 == 'Y'">
+        <input *ngIf="i.isImgItem3 =='N'" type='text' [(ngModel)]="i.cfrAmountManual" (keyup)="calculateAmountOnCfrManual(ind)" (keypress) = "validatecfrAmount($event)" />
+        <img *ngIf="i.isImgItem3 =='Y'" [src]="i.item3" width="30px" height="30px">
+        <span *ngIf="i.isImgItem3 =='N'" id="cfrspan_{{ind}}" class="cfrspan" style="color:red;display:none" >Price required</span>
+      </td>
+      <td *ngIf="4 < dealerSkuColSize && i.isQuotationSelected4 == 'Y' && i.isCfr4 == 'N'">
+        <span *ngIf="i.isImgItem4 =='N'">{{i.item4}}</span>
+        <img *ngIf="i.isImgItem4 =='Y'" [src]="i.item4" width="30px" height="30px">
+      </td>
+      <td *ngIf="4 < dealerSkuColSize && i.isQuotationSelected4 == 'Y' && i.isCfr4 == 'Y'">
+        <input *ngIf="i.isImgItem4 =='N'" type='text' [(ngModel)]="i.cfrAmountManual" (keyup)="calculateAmountOnCfrManual(ind)" (keypress) = "validatecfrAmount($event)" />
+        <img *ngIf="i.isImgItem4 =='Y'" [src]="i.item4" width="30px" height="30px">
+        <span *ngIf="i.isImgItem4 =='N'" id="cfrspan_{{ind}}" class="cfrspan" style="color:red;display:none" >Price required</span>
+      </td>
+      <td *ngIf="5 < dealerSkuColSize && i.isQuotationSelected5 == 'Y' && i.isCfr5 == 'N'">
+        <span *ngIf="i.isImgItem5 =='N'">{{i.item5}}</span>
+        <img *ngIf="i.isImgItem5 =='Y'" [src]="i.item5" width="30px" height="30px">
+      </td>
+      <td *ngIf="5 < dealerSkuColSize && i.isQuotationSelected5 == 'Y' && i.isCfr5 == 'Y'">
+        <input *ngIf="i.isImgItem5 =='N'" type='text' [(ngModel)]="i.cfrAmountManual" (keyup)="calculateAmountOnCfrManual(ind)" (keypress) = "validatecfrAmount($event)" />
+        <img *ngIf="i.isImgItem5 =='Y'" [src]="i.item5" width="30px" height="30px">
+        <span *ngIf="i.isImgItem5 =='N'" id="cfrspan_{{ind}}" class="cfrspan" style="color:red;display:none" >Price required</span>
+      </td>
+      <td *ngIf="6 < dealerSkuColSize && i.isQuotationSelected6 == 'Y' && i.isCfr6 == 'N'">
+        <span *ngIf="i.isImgItem6 =='N'">{{i.item6}}</span>
+        <img *ngIf="i.isImgItem6 =='Y'" [src]="i.item6" width="30px" height="30px">
+      </td>
+      <td *ngIf="6 < dealerSkuColSize && i.isQuotationSelected6 == 'Y' && i.isCfr6 == 'Y'">
+        <input *ngIf="i.isImgItem6 =='N'" type='text' [(ngModel)]="i.cfrAmountManual" (keyup)="calculateAmountOnCfrManual(ind)" (keypress) = "validatecfrAmount($event)" />
+        <img *ngIf="i.isImgItem6 =='Y'" [src]="i.item6" width="30px" height="30px">
+        <span *ngIf="i.isImgItem6 =='N'" id="cfrspan_{{ind}}" class="cfrspan" style="color:red;display:none" >Price required</span>
+      </td>
+      <td *ngIf="7 < dealerSkuColSize && i.isQuotationSelected7 == 'Y' && i.isCfr7 == 'N'">
+        <span *ngIf="i.isImgItem7 =='N'">{{i.item7}}</span>
+        <img *ngIf="i.isImgItem7 =='Y'" [src]="i.item7" width="30px" height="30px">
+      </td>
+      <td *ngIf="7 < dealerSkuColSize && i.isQuotationSelected7 == 'Y' && i.isCfr7 == 'Y'">
+        <input *ngIf="i.isImgItem7 =='N'" type='text' [(ngModel)]="i.cfrAmountManual" (keyup)="calculateAmountOnCfrManual(ind)" (keypress) = "validatecfrAmount($event)" />
+        <img *ngIf="i.isImgItem7 =='Y'" [src]="i.item7" width="30px" height="30px">
+        <span *ngIf="i.isImgItem7 =='N'" id="cfrspan_{{ind}}" class="cfrspan" style="color:red;display:none" >Price required</span>
+      </td>
+      <td *ngIf="8 < dealerSkuColSize && i.isQuotationSelected8 == 'Y' && i.isCfr8 == 'N'">
+        <span *ngIf="i.isImgItem8 =='N'">{{i.item8}}</span>
+        <img *ngIf="i.isImgItem8 =='Y'" [src]="i.item8" width="30px" height="30px">
+      </td>
+      <td *ngIf="8 < dealerSkuColSize && i.isQuotationSelected8 == 'Y' && i.isCfr8 == 'Y'">
+        <input *ngIf="i.isImgItem8 =='N'" type='text' [(ngModel)]="i.cfrAmountManual" (keyup)="calculateAmountOnCfrManual(ind)" (keypress) = "validatecfrAmount($event)" />
+        <img *ngIf="i.isImgItem8 =='Y'" [src]="i.item8" width="30px" height="30px">
+        <span *ngIf="i.isImgItem8 =='N'" id="cfrspan_{{ind}}" class="cfrspan" style="color:red;display:none" >Price required</span>
+      </td>
+      <td *ngIf="9 < dealerSkuColSize && i.isQuotationSelected9 == 'Y' && i.isCfr9 == 'N'">
+        <span *ngIf="i.isImgItem9 =='N'">{{i.item9}}</span>
+        <img *ngIf="i.isImgItem9 =='Y'" [src]="i.item9" width="30px" height="30px">
+      </td>
+      <td *ngIf="9 < dealerSkuColSize && i.isQuotationSelected9 == 'Y' && i.isCfr9 == 'Y'">
+        <input *ngIf="i.isImgItem9 =='N'" type='text' [(ngModel)]="i.cfrAmountManual" (keyup)="calculateAmountOnCfrManual(ind)" (keypress) = "validatecfrAmount($event)" />
+        <img *ngIf="i.isImgItem9 =='Y'" [src]="i.item9" width="30px" height="30px">
+        <span *ngIf="i.isImgItem9 =='N'" id="cfrspan_{{ind}}" class="cfrspan" style="color:red;display:none" >Price required</span>
+      </td>
+      <td *ngIf="10 < dealerSkuColSize && i.isQuotationSelected10 == 'Y' && i.isCfr10 == 'N'">
+        <span *ngIf="i.isImgItem10 =='N'">{{i.item10}}</span>
+        <img *ngIf="i.isImgItem10 =='Y'" [src]="i.item10" width="30px" height="30px">
+      </td>
+      <td *ngIf="10 < dealerSkuColSize && i.isQuotationSelected10 == 'Y' && i.isCfr10 == 'Y'">
+        <input *ngIf="i.isImgItem10 =='N'" type='text' [(ngModel)]="i.cfrAmountManual" (keyup)="calculateAmountOnCfrManual(ind)" (keypress) = "validatecfrAmount($event)" />
+        <img *ngIf="i.isImgItem10 =='Y'" [src]="i.item10" width="30px" height="30px">
+        <span *ngIf="i.isImgItem10 =='N'" id="cfrspan_{{ind}}" class="cfrspan" style="color:red;display:none" >Price required</span>
+      </td>
+      <td *ngIf="11 < dealerSkuColSize && i.isQuotationSelected11 == 'Y' && i.isCfr11 == 'N'">
+        <span *ngIf="i.isImgItem11 =='N'">{{i.item11}}</span>
+        <img *ngIf="i.isImgItem11 =='Y'" [src]="i.item11" width="30px" height="30px">
+      </td>
+      <td *ngIf="11 < dealerSkuColSize && i.isQuotationSelected11 == 'Y' && i.isCfr11 == 'Y'">
+        <input *ngIf="i.isImgItem11 =='N'" type='text' [(ngModel)]="i.cfrAmountManual" (keyup)="calculateAmountOnCfrManual(ind)" (keypress) = "validatecfrAmount($event)" />
+        <img *ngIf="i.isImgItem11 =='Y'" [src]="i.item11" width="30px" height="30px">
+        <span *ngIf="i.isImgItem11 =='N'" id="cfrspan_{{ind}}" class="cfrspan" style="color:red;display:none" >Price required</span>
+      </td>
+      <td *ngIf="12 < dealerSkuColSize && i.isQuotationSelected12 == 'Y' && i.isCfr12 == 'N'">
+        <span *ngIf="i.isImgItem12 =='N'">{{i.item12}}</span>
+        <img *ngIf="i.isImgItem12 =='Y'" [src]="i.item12" width="30px" height="30px">
+      </td>
+      <td *ngIf="12 < dealerSkuColSize && i.isQuotationSelected12 == 'Y' && i.isCfr12 == 'Y'">
+        <input *ngIf="i.isImgItem12 =='N'" type='text' [(ngModel)]="i.cfrAmountManual" (keyup)="calculateAmountOnCfrManual(ind)" (keypress) = "validatecfrAmount($event)" />
+        <img *ngIf="i.isImgItem12 =='Y'" [src]="i.item12" width="30px" height="30px">
+        <span *ngIf="i.isImgItem12 =='N'" id="cfrspan_{{ind}}" class="cfrspan" style="color:red;display:none" >Price required</span>
+      </td>
+      <td *ngIf="13 < dealerSkuColSize && i.isQuotationSelected13 == 'Y' && i.isCfr13 == 'N'">
+        <span *ngIf="i.isImgItem13 =='N'">{{i.item13}}</span>
+        <img *ngIf="i.isImgItem13 =='Y'" [src]="i.item13" width="30px" height="30px">
+      </td>
+      <td *ngIf="13 < dealerSkuColSize && i.isQuotationSelected13 == 'Y' && i.isCfr13 == 'Y'">
+        <input *ngIf="i.isImgItem13 =='N'" type='text' [(ngModel)]="i.cfrAmountManual" (keyup)="calculateAmountOnCfrManual(ind)" (keypress) = "validatecfrAmount($event)" />
+        <img *ngIf="i.isImgItem13 =='Y'" [src]="i.item13" width="30px" height="30px">
+        <span *ngIf="i.isImgItem13 =='N'" id="cfrspan_{{ind}}" class="cfrspan" style="color:red;display:none" >Price required</span>
+      </td>
+      <td *ngIf="14 < dealerSkuColSize && i.isQuotationSelected14 == 'Y' && i.isCfr14 == 'N'">
+        <span *ngIf="i.isImgItem14 =='N'">{{i.item14}}</span>
+        <img *ngIf="i.isImgItem14 =='Y'" [src]="i.item14" width="30px" height="30px">
+      </td>
+      <td *ngIf="14 < dealerSkuColSize && i.isQuotationSelected14 == 'Y' && i.isCfr14 == 'Y'">
+        <input *ngIf="i.isImgItem14 =='N'" type='text' [(ngModel)]="i.cfrAmountManual" (keyup)="calculateAmountOnCfrManual(ind)" (keypress) = "validatecfrAmount($event)" />
+        <img *ngIf="i.isImgItem14 =='Y'" [src]="i.item14" width="30px" height="30px">
+        <span *ngIf="i.isImgItem14 =='N'" id="cfrspan_{{ind}}" class="cfrspan" style="color:red;display:none" >Price required</span>
+      </td>
+      <td *ngIf="15 < dealerSkuColSize && i.isQuotationSelected15 == 'Y' && i.isCfr15 == 'N'">
+        <span *ngIf="i.isImgItem15 =='N'">{{i.item15}}</span>
+        <img *ngIf="i.isImgItem15 =='Y'" [src]="i.item15" width="30px" height="30px">
+      </td>
+      <td *ngIf="15 < dealerSkuColSize && i.isQuotationSelected15 == 'Y' && i.isCfr15 == 'Y'">
+        <input *ngIf="i.isImgItem15 =='N'" type='text' [(ngModel)]="i.cfrAmountManual" (keyup)="calculateAmountOnCfrManual(ind)" (keypress) = "validatecfrAmount($event)" />
+        <img *ngIf="i.isImgItem15 =='Y'" [src]="i.item15" width="30px" height="30px">
+        <span *ngIf="i.isImgItem15 =='N'" id="cfrspan_{{ind}}" class="cfrspan" style="color:red;display:none" >Price required</span>
+      </td>
+      <td *ngIf="16 < dealerSkuColSize && i.isQuotationSelected16 == 'Y' && i.isCfr16 == 'N'">
+        <span *ngIf="i.isImgItem16 =='N'">{{i.item16}}</span>
+        <img *ngIf="i.isImgItem16 =='Y'" [src]="i.item16" width="30px" height="30px">
+      </td>
+      <td *ngIf="16 < dealerSkuColSize && i.isQuotationSelected16 == 'Y' && i.isCfr16 == 'Y'">
+        <input *ngIf="i.isImgItem16 =='N'" type='text' [(ngModel)]="i.cfrAmountManual" (keyup)="calculateAmountOnCfrManual(ind)" (keypress) = "validatecfrAmount($event)" />
+        <img *ngIf="i.isImgItem16 =='Y'" [src]="i.item16" width="30px" height="30px">
+        <span *ngIf="i.isImgItem16 =='N'" id="cfrspan_{{ind}}" class="cfrspan" style="color:red;display:none" >Price required</span>
+      </td>
+      <td *ngIf="17 < dealerSkuColSize && i.isQuotationSelected17 == 'Y' && i.isCfr17 == 'N'">
+        <span *ngIf="i.isImgItem17 =='N'">{{i.item17}}</span>
+        <img *ngIf="i.isImgItem17 =='Y'" [src]="i.item17" width="30px" height="30px">
+      </td>
+      <td *ngIf="17 < dealerSkuColSize && i.isQuotationSelected17 == 'Y' && i.isCfr17 == 'Y'">
+        <input *ngIf="i.isImgItem17 =='N'" type='text' [(ngModel)]="i.cfrAmountManual" (keyup)="calculateAmountOnCfrManual(ind)" (keypress) = "validatecfrAmount($event)" />
+        <img *ngIf="i.isImgItem17 =='Y'" [src]="i.item17" width="30px" height="30px">
+        <span *ngIf="i.isImgItem17 =='N'" id="cfrspan_{{ind}}" class="cfrspan" style="color:red;display:none" >Price required</span>
+      </td>
+      <td *ngIf="18 < dealerSkuColSize && i.isQuotationSelected18 == 'Y' && i.isCfr18 == 'N'">
+        <span *ngIf="i.isImgItem18 =='N'">{{i.item18}}</span>
+        <img *ngIf="i.isImgItem18 =='Y'" [src]="i.item18" width="30px" height="30px">
+      </td>
+      <td *ngIf="18 < dealerSkuColSize && i.isQuotationSelected18 == 'Y' && i.isCfr18 == 'Y'">
+        <input *ngIf="i.isImgItem18 =='N'" type='text' [(ngModel)]="i.cfrAmountManual" (keyup)="calculateAmountOnCfrManual(ind)" (keypress) = "validatecfrAmount($event)" />
+        <img *ngIf="i.isImgItem18 =='Y'" [src]="i.item18" width="30px" height="30px">
+        <span *ngIf="i.isImgItem18 =='N'" id="cfrspan_{{ind}}" class="cfrspan" style="color:red;display:none" >Price required</span>
+      </td>
+      <td *ngIf="19 < dealerSkuColSize && i.isQuotationSelected19 == 'Y' && i.isCfr19 == 'N'">
+        <span *ngIf="i.isImgItem19 =='N'">{{i.item19}}</span>
+        <img *ngIf="i.isImgItem19 =='Y'" [src]="i.item19" width="30px" height="30px">
+      </td>
+      <td *ngIf="19 < dealerSkuColSize && i.isQuotationSelected19 == 'Y' && i.isCfr19 == 'Y'">
+        <input *ngIf="i.isImgItem19 =='N'" type='text' [(ngModel)]="i.cfrAmountManual" (keyup)="calculateAmountOnCfrManual(ind)" (keypress) = "validatecfrAmount($event)" />
+        <img *ngIf="i.isImgItem19 =='Y'" [src]="i.item19" width="30px" height="30px">
+        <span *ngIf="i.isImgItem19 =='N'" id="cfrspan_{{ind}}" class="cfrspan" style="color:red;display:none" >Price required</span>
+      </td>
+      <td *ngIf="20 < dealerSkuColSize && i.isQuotationSelected20 == 'Y' && i.isCfr20 == 'N'">
+        <span *ngIf="i.isImgItem20 =='N'">{{i.item20}}</span>
+        <img *ngIf="i.isImgItem20 =='Y'" [src]="i.item20" width="30px" height="30px">
+      </td>
+      <td *ngIf="20 < dealerSkuColSize && i.isQuotationSelected20 == 'Y' && i.isCfr20 == 'Y'">
+        <input *ngIf="i.isImgItem20 =='N'" type='text' [(ngModel)]="i.cfrAmountManual" (keyup)="calculateAmountOnCfrManual(ind)" (keypress) = "validatecfrAmount($event)" />
+        <img *ngIf="i.isImgItem20 =='Y'" [src]="i.item20" width="30px" height="30px">
+        <span *ngIf="i.isImgItem20 =='N'" id="cfrspan_{{ind}}" class="cfrspan" style="color:red;display:none" >Price required</span>
+      </td>
+      <td *ngIf="21 < dealerSkuColSize && i.isQuotationSelected21 == 'Y' && i.isCfr21 == 'N'">
+        <span *ngIf="i.isImgItem21 =='N'">{{i.item21}}</span>
+        <img *ngIf="i.isImgItem21 =='Y'" [src]="i.item21" width="30px" height="30px">
+      </td>
+      <td *ngIf="21 < dealerSkuColSize && i.isQuotationSelected21 == 'Y' && i.isCfr21 == 'Y'" >
+        <input *ngIf="i.isImgItem21 =='N'" type='text' [(ngModel)]="i.cfrAmountManual" (keyup)="calculateAmountOnCfrManual(ind)" (keypress) = "validatecfrAmount($event)" />
+        <img *ngIf="i.isImgItem21 =='Y'" [src]="i.item21" width="30px" height="30px">
+        <span *ngIf="i.isImgItem21 =='N'" id="cfrspan_{{ind}}" class="cfrspan" style="color:red;display:none" >Price required</span>
+      </td>
+      <td *ngIf="22 < dealerSkuColSize && i.isQuotationSelected22 == 'Y' && i.isCfr22 == 'N'">
+        <span *ngIf="i.isImgItem22 =='N'">{{i.item22}}</span>
+        <img *ngIf="i.isImgItem22 =='Y'" [src]="i.item22" width="30px" height="30px">
+      </td>
+      <td *ngIf="22 < dealerSkuColSize && i.isQuotationSelected22 == 'Y' && i.isCfr22 == 'Y'">
+        <input *ngIf="i.isImgItem22 =='N'" type='text' [(ngModel)]="i.cfrAmountManual" (keyup)="calculateAmountOnCfrManual(ind)" (keypress) = "validatecfrAmount($event)" />
+        <img *ngIf="i.isImgItem22 =='Y'" [src]="i.item22" width="30px" height="30px">
+        <span *ngIf="i.isImgItem22 =='N'" id="cfrspan_{{ind}}" class="cfrspan" style="color:red;display:none" >Price required</span>
+      </td>
+      <td *ngIf="23 < dealerSkuColSize && i.isQuotationSelected23 == 'Y' && i.isCfr23 == 'N'">
+        <span *ngIf="i.isImgItem23 =='N'">{{i.item23}}</span>
+        <img *ngIf="i.isImgItem23 =='Y'" [src]="i.item23" width="30px" height="30px">
+      </td>
+      <td *ngIf="23 < dealerSkuColSize && i.isQuotationSelected23 == 'Y' && i.isCfr23 == 'Y'">
+        <input *ngIf="i.isImgItem23 =='N'" type='text' [(ngModel)]="i.cfrAmountManual" (keyup)="calculateAmountOnCfrManual(ind)" (keypress) = "validatecfrAmount($event)"/>
+        <img *ngIf="i.isImgItem23 =='Y'" [src]="i.item23" width="30px" height="30px">
+        <span *ngIf="i.isImgItem23 =='N'" id="cfrspan_{{ind}}" class="cfrspan" style="color:red;display:none" >Price required</span>
+      </td>
+      <td *ngIf="24 < dealerSkuColSize && i.isQuotationSelected24 == 'Y' && i.isCfr24 == 'N'">
+        <span *ngIf="i.isImgItem24 =='N'">{{i.item24}}</span>
+        <img *ngIf="i.isImgItem24 =='Y'" [src]="i.item24" width="30px" height="30px">
+      </td>
+      <td *ngIf="24 < dealerSkuColSize && i.isQuotationSelected24 == 'Y' && i.isCfr24 == 'Y'">
+        <input *ngIf="i.isImgItem24 =='N'" type='text' [(ngModel)]="i.cfrAmountManual" (keyup)="calculateAmountOnCfrManual(ind)" (keypress) = "validatecfrAmount($event)"/>
+        <img *ngIf="i.isImgItem24 =='Y'" [src]="i.item24" width="30px" height="30px">
+        <span *ngIf="i.isImgItem24 =='N'" id="cfrspan_{{ind}}" class="cfrspan" style="color:red;display:none" >Price required</span>
+      </td>
+      <td *ngIf="25 < dealerSkuColSize && i.isQuotationSelected25 == 'Y' && i.isCfr25 == 'N'">
+        <span *ngIf="i.isImgItem25 =='N'">{{i.item25}}</span>
+        <img *ngIf="i.isImgItem25 =='Y'" [src]="i.item25" width="30px" height="30px">
+      </td>
+      <td *ngIf="25 < dealerSkuColSize && i.isQuotationSelected25 == 'Y' && i.isCfr25 == 'Y'">
+        <input *ngIf="i.isImgItem25 =='N'" type='text' [(ngModel)]="i.cfrAmountManual" (keyup)="calculateAmountOnCfrManual(ind)" (keypress) = "validatecfrAmount($event)"/>
+        <img *ngIf="i.isImgItem25 =='Y'" [src]="i.item25" width="30px" height="30px">
+        <span *ngIf="i.isImgItem25 =='N'" id="cfrspan_{{ind}}" class="cfrspan" style="color:red;display:none" >Price required</span>
+      </td>
+    
+      <td >
+        <input class="quant_{{ind}}" type="text" (keyup)="calculateAmount(ind)" style="width:50px" [(ngModel)]="i.qty" (keypress)="validateQuantity($event)"
+        />
+        <span id="qtyspan_{{ind}}" class="qtyspan" style="color:red;display:none" >Qty required</span>
+      </td>
+      <td >
+        <span class="amount_{{ind}}">{{i.price | number: '1.2-2'}}</span>
+        <!-- {{i.cfrAmount}} -->
+      </td>
+    </tr>
+  </table>
+  <div class="col-sm-12">
+    <div class="col-sm-4">
+    </div>
+    <div class="col-sm-4" *ngIf="selectedItems.length!=0">
+      <!-- <input type="button" (click)="saveDraftSelectedItems()" style="width:30%" value="Save As Draft" class="form-control btn btn-primary"
+      /> -->
+    </div>
+    <div class="col-sm-4" *ngIf="selectedItems.length!=0">
+      <label style="width:50%">TOTAL: </label>
+      <label style="float:right;padding-right:10%">{{baseAmount | number: '1.2-2'}} </label>
+    </div>
+
+  </div>
+</div>
+<div *ngIf="selectedItems.length!=0" class="col-sm-12" style="background:rgba(233, 6, 6,  0.705);margin-top:5px;margin-bottom:5px;">
+  <label style="color:white; font-size: 16px;padding-top: 4px">GRAND TOTAL</label>
+  <span style="float:right;color:white; font-size: 20px;">{{billingAmount | number: '1.2-2'}}</span>
+</div>
+<div class="col-sm-12" *ngIf="selectedItems.length != 0">
+  <label>ADDITIONAL COST..&nbsp;&nbsp; </label>
+  <span (click)="addBillingValue()" style="cursor:pointer" title="Additional Cost">
+    <i class="fa fa-plus"></i>
+  </span>
+</div>
+<div class="col-sm-12" *ngIf="billingValueList.length != 0">
+  <table class="table" border="1px" style="font-size:12px">
+    <tr  style="background-color:#c2dceb">
+      <th>ACTION</th>
+      <th>NAME</th>
+      <th>VALUE</th>
+      <th>TYPE</th>
+    </tr>
+    <tr style="background-color:#eaeff2" *ngFor="let bv of billingValueList; let ind = index">
+      <td>
+        <span (click)="removeBillingValue(ind)" style="cursor:pointer" title="Delete">
+          <i class="fa fa-minus"></i>
+        </span>
+      </td>
+      <td>
+        <input type="text" class="form-control" [(ngModel)]="bv.billingName" (keypress)="billingNameValidation($event,ind)" />
+      </td>
+      <td>
+        <input type="text" class="form-control" [(ngModel)]="bv.billingValue" (keypress)="billingValueValidation($event,ind)" (keyup)="billingValueValidation1($event,ind)"
+        />
+
+      </td>
+      <td>
+        <label class="radio-inline ">
+          <input type="radio" (click)="calculateBillingAmount(bv,'add')" id="add_{{ind}}" required [(ngModel)]="bv.billingType" value="add" name="billingType_{{ind}}">Add
+        </label>
+        <label class="radio-inline">
+          <input type="radio" (click)="calculateBillingAmount(bv,'subtract')" id="subtract_{{ind}}" required [(ngModel)]="bv.billingType" value="subtract" name="billingType_{{ind}}">Subtract
+        </label>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<div *ngIf="selectedItems.length!=0" class="col-sm-12" style="background:rgba(233, 6, 6, 0.705);margin-top:5px;margin-bottom:5px;">
+  <label style="color:white; font-size: 16px;padding-top: 4px">TERMS & CONDITIONS</label>
+</div>
+<div *ngIf="selectedItems.length!=0" class="col-sm-12">
+  <div *ngFor="let t of termConditionList; let ind = index">
+    <label class="checkbox-inline quotationClass">
+      <input  class="t_{{ind}} tcauto" [(ngModel)]="t.chkId" [value]= "t.id" type="checkbox">{{t.value}}
+    </label>
+  </div>
+  <div>
+    <label>To Add more..&nbsp;&nbsp; </label>
+    <span (click)="addTermAndCondition()" style="cursor:pointer" title="Add T&C">
+      <i class="fa fa-plus"></i>
+    </span>
+  </div>
+  <div *ngFor="let tc of tclist; let ind = index" class="form-inline ">
+    <span (click)="removeTermAndCondition(ind)" style="cursor:pointer" title="Delete">
+      <i class="fa fa-minus"></i>
+    </span>&nbsp;&nbsp;
+    <!-- <input class="tc_{{ind}}" type="checkbox" class="form-control" /> -->
+    <input  type="text" class="form-control" style="margin:5px; width:50%" [(ngModel)]="tc.tcValue"/>
+  </div>
+  <!-- <div class="form-inline quotationClass">
+    <input type="checkbox" class="form-control" />
+    <input type="text" class="form-control" style="margin:5px; width:50%" />
+  </div> -->
+</div>
+
+<div *ngIf="selectedItems.length!=0" class="col-sm-12" style="margin-bottom:5px">
+
+  <input type="button" value="Submit" class="form-control btn btn-primary" style="width:10%;border-radius:15px" (click)="submitQuotation()"
+  />
+
+  <!-- <div class="col-sm-6">
+      <input type="button" value="Cancel" class="form-control btn btn-primary" />
+  </div> -->
+</div>
+
+<div class="col-sm-12" style="background:rgba(233, 6, 6, 0.705);margin-bottom:5px;">
+  <label style="color:white; font-size: 16px;padding-top: 4px">QUOTATION HISTORY</label>
+</div>
+
+<!-- <div class="col-sm-12" style="height:250px; overflow:auto">
+    <ng2-smart-table [settings]="qhsettings" [source]="quotationHistory" >
+    </ng2-smart-table>
+</div> -->
+
+
+<div class="col-sm-12 ">
+  <!-- <input type="text" [(ngModel)]="userFilter.toName" placeholder="search"> -->
+  <input class="form-control" style="width:20%" type="text" [(ngModel)]="term" placeholder="Search.." />
+  <table class="table" border="1px" style="font-size:12px">
+    <tr style="background-color:#c2dceb">
+      <th class="text-center">QUOTATION ID</th>
+      <th class="text-center">FROM</th>
+      <th class="text-center">TO</th>
+      <th class="text-center">ISSUED BY</th>
+      <th class="text-center"> QUOTATION DATE</th>
+      <th class="text-center">STATUS</th>
+      <th class="text-center">ACTION</th>
+      <th class="text-center">BUDGETARY</th>
+      <th class="text-center" >DETAILED</th>
+      <th class="text-center">EXPORT</th>
+    </tr>
+    <!-- <tr *ngFor="let qh of quotationHistory | filterBy: userFilter">{{qh.toName}} -->
+    <tr style="background-color:#eaeff2" *ngFor="let qh of quotationHistory |filter:term | paginate: { itemsPerPage: 5, currentPage: p}">
+      <td >{{qh.qId}}</td>
+      <td >{{qh.fromName}}</td>
+      <td>{{qh.toName}}</td>
+      <td>{{qh.issuedBy}}</td>
+      <td> {{qh.quotationDate}}</td>
+      <td>{{qh.status}}</td>
+      <td>
+        <!-- <input type="button" style="border-radius:10px;font-size:12px" (click)="viewPendingQuotation(qh.id)" class=" btn btn-primary" value="Edit"
+        /> -->
+        
+        <i (click)="viewPendingQuotation(qh.id)" class="fa fa-pencil" aria-hidden="true" style="margin:5px;width:30%;transform: scale(1.8,1.8);color: brown;cursor:pointer" title="Edit"></i>
+        <i *ngIf="roleId == '1'" (click)="deleteQuotation(qh.id)" class="fa fa-trash" aria-hidden="true" style="transform: scale(1.8,1.8);color: red;cursor:pointer" title="Delete"></i>
+      </td>
+      <td>
+        <input type="button" style="border-radius:10px;font-size:12px" [disabled]="qh.status=='PENDING'" (click)="chooseOptionalField(qh.id,qh.selectedItem)" class=" btn btn-primary"
+          value="Budget Pdf" />
+      </td>
+      <td >
+        <input type="button" style="border-radius:10px;font-size:12px" [disabled]="qh.status=='PENDING'" (click)="chooseCombination(qh.id)" class="btn btn-primary" value="Detail Pdf"
+        />
+      </td>
+      <td>
+        <input type="button"style="border-radius:10px;font-size:12px"  class="btn btn-primary" (click)="exportToExcel(qh.id)" value="Excel" />
+      </td>
+    </tr>
+  </table>
+  <pagination-controls (pageChange)="p = $event"></pagination-controls>
+</div>
+
+
+<div class="modal fade" id="modelWindow1" role="dialog" style="z-index: 2000;">
+  <div class="modal-dialog modal-sm vertical-align-center" style="width:90%;">
+    <div class="modal-content" style="margin-top:15%">
+      <div class="modal-header" style="background:rgb(195, 199, 255)">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title" style="font-weight:bold">CHOOSE OPTIONAL FIELD (Maximum 5 fields can be selected in a single time)
+         </h4>
+        
+      </div>
+      <div class="modal-body">
+        <div class="col-sm-12">
+          <div class="row" *ngFor="let optionalField of optionalFieldList; let ind = index">
+            <input  id = "optionalCheck_{{ind}}" type="checkbox" (click)="clickOnOptionalField(ind)" />&nbsp;&nbsp;
+            <label>{{optionalField.fieldName}}</label>
+          </div>
+          <div class="row">
+            <input id="refNum" type="checkbox" (click)="clickOnRefNo()"/>&nbsp;&nbsp;
+            <label>REFERENCE NUMBER</label>
+          </div>
+        </div>
+        <div class="col-sm-12 text-center ">
+          <div class="row">
+            <input type="button" (click)="downloadBudgetPdf()" class="btn btn-primary" value="GENERATE PDF" />
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">CLOSE</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <input [ngxTimepicker]="picker">
+<ngx-material-timepicker #picker></ngx-material-timepicker> -->
+
+<div class="modal fade" id="modelWindow2" role="dialog" style="z-index:2000">
+  <div class="modal-dialog modal-sm vertical-align-center " style="width:90%;">
+    <div class="modal-content" >
+      <div class="modal-header" style="background:rgb(195, 199, 255)">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title" style="font-weight:bold">VIEW COMBINATIONS</h4>
+      </div>
+      <div class="modal-body">
+
+        <!-- <div class="col-sm-12" style="background:rgb(255, 0, 0);margin-top:10px;margin-bottom:5px;margin-left:15px;width: 1410px;padding-top:2px;">
+          <label style="color:white; font-size: 20px;">VIEW COMBINATIONS</label>
+        </div>
+        <br> -->
+        <div class="col-sm-12">
+          <div class="col-sm-2" style="width: 19.5%;">
+            <div class="row">
+              <input type="radio" name="fcRadio" id="c1" (click)="selectfilledComb(c1)" />
+              <label>&nbsp;&nbsp;COMBINATION 1&nbsp;&nbsp;</label>
+
+            </div>
+
+            <table border="0px" style="font-size:12px">
+              <tr style="border:0px" *ngFor="let fc of fieldConfigComb.comb1">
+
+                <td style="border:0px">{{fc.fieldName}}</td>
+              </tr>
+
+            </table>
+
+          </div>
+          <div class="col-sm-2" style="width: 19.5%;">
+            <div class="row">
+              <input type="radio" name="fcRadio" id="c2" (click)="selectfilledComb(c2)" />
+              <label>&nbsp;&nbsp;COMBINATION 2&nbsp;&nbsp;</label>
+
+            </div>
+            <table border="0px" style="font-size:12px">
+              <tr *ngFor="let fc of fieldConfigComb.comb2">
+
+                <td style="border:0px">{{fc.fieldName}}</td>
+              </tr>
+
+            </table>
+
+          </div>
+          <div class="col-sm-2" style="width: 19.5%;">
+            <div class="row">
+              <input type="radio" name="fcRadio" id="c3" (click)="selectfilledComb(c3)" />
+              <label>&nbsp;&nbsp;COMBINATION 3&nbsp;&nbsp;</label>
+
+            </div>
+            <table border="0px" style="font-size:12px">
+              <tr *ngFor="let fc of fieldConfigComb.comb3">
+
+                <td style="border:0px">{{fc.fieldName}}</td>
+              </tr>
+            </table>
+
+          </div>
+          <div class="col-sm-2" style="width: 19.5%;">
+            <div class="row">
+              <input type="radio" name="fcRadio" id="c4" (click)="selectfilledComb(c4)" />
+              <label>&nbsp;&nbsp;COMBINATION 4&nbsp;&nbsp;</label>
+
+            </div>
+            <table border="0px" style="font-size:12px">
+              <tr *ngFor="let fc of fieldConfigComb.comb4">
+
+                <td style="border:0px">{{fc.fieldName}}</td>
+              </tr>
+            </table>
+
+          </div>
+          <div class="col-sm-2" style="width: 19.5%;">
+            <div class="row">
+              <input type="radio" name="fcRadio" id="c5" (click)="selectfilledComb(c5)" />
+              <label>&nbsp;&nbsp;COMBINATION 5&nbsp;&nbsp;</label>
+
+            </div>
+            <table border="0px" style="font-size:12px">
+              <tr *ngFor="let fc of fieldConfigComb.comb5">
+
+                <td style="border:0px">{{fc.fieldName}}</td>
+              </tr>
+            </table>
+
+          </div>
+          <!-- <div class="text-center">
+                    <img class='loaderClass1' src="assets/images/loader.gif" />
+                </div> -->
+
+        </div>
+
+        <div class="col-sm-12 text-center ">
+          <div class="row">
+            <input type="button" (click)="downloadDetailPdf()" class="btn btn-primary" value="GENERATE PDF" />
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">CLOSE</button>
+      </div>
+    </div>
+  </div>
+</div>

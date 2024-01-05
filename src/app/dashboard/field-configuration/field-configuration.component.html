@@ -1,0 +1,263 @@
+<!-- <div class="container"> -->
+<div class="col-sm-12" style="background:rgba(233, 6, 6, 0.705);margin-top:5px;margin-bottom:5px;padding-top:2px;">
+    <label style="color:white; font-size: 16px;padding-top: 4px">FIELD CONFIGURATION</label>
+</div>
+<!-- <ngx-spinner></ngx-spinner> -->
+<div class="col-sm-12" style="border: 1px solid black;padding-bottom:5px;">
+    <form id="fConfigFormId">
+        <!-- <div class="col-sm-2" *ngFor="let f of fieldlist">
+                <label class="checkbox-inline fieldClass">
+                    <input type="checkbox" [id] = "f.id" (click)="checkFieldName(f.id)" [name]="f.id" class="fconfigClass">{{f.fieldName}}
+                </label>
+            </div> -->
+        <div class="col-sm-3">
+            <label class="fieldClass">COMMONS</label>
+            <table >
+                <tr *ngFor="let f of commonList">
+                    <!-- <td>
+                            <input type="checkbox" [id]="f.id" (click)="checkFieldName(f.id)" [name]="f.id" class="fconfigClass">
+                        </td>
+                        <td>{{f.fieldName}}</td> -->
+                    <td>
+                        <label class="checkbox-inline " style="font-size:12px;margin-top:0px;padding:0px">
+                            <input class = "fconfigClass" style="margin-top:1px" type="checkbox" [id]="f.id" (click)="checkFieldName(f.id)" [name]="f.id">{{f.fieldName}}
+                        </label>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-sm-3">
+            <label class="fieldClass">WATER CLOSETS</label>
+            <table>
+                <tr *ngFor="let f of wcList">
+                    <td>
+                        <label class="checkbox-inline " style="font-size:12px;margin-top:0px;padding:0px">
+                            <input class = "fconfigClass" style="margin-top:1px" type="checkbox" [id]="f.id" (click)="checkFieldName(f.id)" [name]="f.id">{{f.fieldName}}
+                        </label>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-sm-3">
+            <label class="fieldClass">FAUCETS</label>
+            <table>
+                <tr *ngFor="let f of fList">
+                    <td>
+                        <label class="checkbox-inline " style="font-size:12px;margin-top:0px;padding:0px">
+                            <input class = "fconfigClass" style="margin-top:1px" type="checkbox" [id]="f.id" (click)="checkFieldName(f.id)" [name]="f.id">{{f.fieldName}}
+                        </label>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-sm-3">
+            <label class="fieldClass">URINAL</label>
+            <table>
+                <tr *ngFor="let f of uList">
+                    <td>
+                        <label class="checkbox-inline " style="font-size:12px;margin-top:0px;padding:0px">
+                            <input class = "fconfigClass" style="margin-top:1px" type="checkbox" [id]="f.id" (click)="checkFieldName(f.id)" [name]="f.id">{{f.fieldName}}
+                        </label>
+                    </td>
+                </tr>
+            </table>
+            <br>
+            <label class="fieldClass">BASINS</label>
+            <table>
+                <tr *ngFor="let f of bList">
+                    <td>
+                        <label class="checkbox-inline " style="font-size:12px;margin-top:0px;padding:0px">
+                            <input class = "fconfigClass" style="margin-top:1px;" type="checkbox" [id]="f.id" (click)="checkFieldName(f.id)" [name]="f.id">{{f.fieldName}}
+                        </label>
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+        <div class="row" style="margin:0px;">
+            <div class="col-sm-12 text-center " style="margin-top:5px;">
+                <!-- <button id = "saveBtnId"  class="btn btn-primary" (click)="saveConfig()" style="width:20%;color: white;"> Save</button> -->
+                <input id="saveBtnId" type="button" class="btn btn-primary"  (click)="saveConfig()" style="color: white; width:10%;border-radius:15px"
+                    value="Save"> &nbsp;&nbsp;
+                <input id="updateBtnId" type="button" class="btn btn-primary"  (click)="updateConfig()" style="color: white;width:10%;border-radius:15px"
+                    value="Update"> &nbsp;&nbsp;
+                <input id="cancelBtnId" type="button" class="btn btn-info"  (click)="cancelConfig()" style="color: black;width:10%;border-radius:15px"
+                    value="Cancel">
+            </div>
+        </div>
+    </form>
+    <!-- <div class="col-sm-3">
+              <label class = "checkbox-inline fieldClass">
+                  <input type = "checkbox" >Image
+                </label>
+            </div> -->
+    <!-- <div class="row">
+            <div class="col-sm-3 fieldClass">
+                <label class = "checkbox-inline">
+                    <input type = "checkbox" >Item Code
+                  </label>
+            </div>
+            <div class="col-sm-3 fieldClass">
+                <label class = "checkbox-inline">
+                    <input type = "checkbox" >Line Diagram
+                  </label>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-sm-3 fieldClass">
+                  <label class = "checkbox-inline">
+                      <input type = "checkbox" >Cat Code
+                    </label>
+              </div>
+              <div class="col-sm-3 fieldClass">
+                  <label class = "checkbox-inline">
+                      <input type = "checkbox" >Item Description
+                    </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3 fieldClass">
+                    <label class = "checkbox-inline">
+                        <input type = "checkbox" >Item Name
+                      </label>
+                </div>
+                <div class="col-sm-3 fieldClass">
+                    <label class = "checkbox-inline">
+                        <input type = "checkbox" >Price in $
+                      </label>
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="col-sm-3">
+                      <button style="width:60%">Submit</button>
+                  </div>
+                  <div class="col-sm-3">
+                      <button style="width:60%">Cancel</button>
+                    </div>
+                </div> -->
+</div>
+<div class="text-center">
+    <img class='loaderClass ' src="assets/images/loader.gif" />
+</div>
+<!-- </div> -->
+<br>
+<div class="col-sm-12" style="background:rgba(233, 6, 6, 0.705);margin-top:10px;margin-bottom:5px;padding-top:2px;">
+    <label style="color:white; font-size: 16px;padding-top: 4px;">VIEW COMBINATIONS</label>
+</div>
+<br>
+<div class="col-sm-12">
+    <div class="col-sm-2" style="width: 19.5%;">
+        <div class="row">
+            <!-- <input type="radio" name="fcRadio" [id]="c1"  (click)="selectfilledComb(c1)"/> -->
+            <label class="fieldClass">&nbsp;&nbsp;COMBINATION 1&nbsp;&nbsp;</label>
+            <i (click)="editComb(c1)" class="fa fa-pencil" aria-hidden="true" style="width:10%;color: brown;cursor:pointer" title="Edit"></i>
+            <i (click)="deleteComb(c1)" class="fa fa-remove" aria-hidden="true" style="color: red;cursor:pointer" title="Delete"></i>
+            <!-- <button>Edit</button>
+                <button>Delete</button> -->
+        </div>
+
+        <table style="font-size:12px">
+            <tr *ngFor="let fc of fieldConfigComb.comb1">
+
+                <td>{{fc.fieldName}}</td>
+            </tr>
+            <!-- <tr>
+                    <td>Cat Code</td>
+                </tr>
+                <tr>
+                    <td>Image</td>
+                </tr>
+                <tr>
+                    <td>Item Description</td>
+                </tr> -->
+        </table>
+
+    </div>
+    <div class="col-sm-2" style="width: 19.5%;">
+        <div class="row">
+            <!-- <input type="radio" name="fcRadio" [id]="c2" (click)="selectfilledComb(c2)"/> -->
+            <label class="fieldClass">&nbsp;&nbsp;COMBINATION 2&nbsp;&nbsp;</label>
+            <i (click)="editComb(c2)" class="fa fa-pencil" aria-hidden="true" style="width:10%;color: brown;cursor:pointer" title="Edit"></i>
+            <i (click)="deleteComb(c2)" class="fa fa-remove" aria-hidden="true" style="color: red;cursor:pointer" title="Delete"></i>
+            <!-- <button>Edit</button> -->
+            <!-- <button>Delete</button> -->
+        </div>
+        <table style="font-size:12px">
+            <tr *ngFor="let fc of fieldConfigComb.comb2">
+
+                <td>{{fc.fieldName}}</td>
+            </tr>
+            <!-- <tr>
+                            <td>SkuNo</td>
+                            
+                    </tr>
+                    <tr>
+                            <td>Cat Code</td>
+                           
+                    </tr>
+                    <tr>
+                            <td>Item Code</td>
+                            
+                    </tr>
+                    <tr>
+                            <td>Item Name</td>
+                    </tr> -->
+        </table>
+
+    </div>
+    <div class="col-sm-2" style="width: 19.5%;">
+        <div class="row">
+            <!-- <input type="radio" name="fcRadio" [id]="c3" (click)="selectfilledComb(c3)"/> -->
+            <label class="fieldClass">&nbsp;&nbsp;COMBINATION 3&nbsp;&nbsp;</label>
+            <i (click)="editComb(c3)" class="fa fa-pencil" aria-hidden="true" style="width:10%;color: brown;cursor:pointer" title="Edit"></i>
+            <i (click)="deleteComb(c3)" class="fa fa-remove" aria-hidden="true" style="color: red;cursor:pointer" title="Delete"></i>
+            <!-- <button>Edit</button>
+                    <button>Delete</button> -->
+        </div>
+        <table style="font-size:12px">
+            <tr *ngFor="let fc of fieldConfigComb.comb3">
+
+                <td>{{fc.fieldName}}</td>
+            </tr>
+        </table>
+
+    </div>
+    <div class="col-sm-2" style="width: 19.5%;">
+        <div class="row">
+            <!-- <input type="radio" name="fcRadio" [id]="c4" (click)="selectfilledComb(c4)"/> -->
+            <label class="fieldClass">&nbsp;&nbsp;COMBINATION 4&nbsp;&nbsp;</label>
+            <i (click)="editComb(c4)" class="fa fa-pencil" aria-hidden="true" style="width:10%;color: brown;cursor:pointer" title="Edit"></i>
+            <i (click)="deleteComb(c4)" class="fa fa-remove" aria-hidden="true" style="color: red;cursor:pointer" title="Delete"></i>
+            <!-- <button>Edit</button>
+                    <button>Delete</button> -->
+        </div>
+        <table style="font-size:12px">
+            <tr *ngFor="let fc of fieldConfigComb.comb4">
+
+                <td>{{fc.fieldName}}</td>
+            </tr>
+        </table>
+
+    </div>
+    <div class="col-sm-2" style="width: 19.5%;">
+        <div class="row">
+            <!-- <input type="radio" name="fcRadio" [id]="c5" (click)="selectfilledComb(c5)"/> -->
+            <label class="fieldClass">&nbsp;&nbsp;COMBINATION 5&nbsp;&nbsp;</label>
+            <i (click)="editComb(c5)" class="fa fa-pencil" aria-hidden="true" style="width:10%;color: brown;cursor:pointer" title="Edit"></i>
+            <i (click)="deleteComb(c5)" class="fa fa-remove" aria-hidden="true" style="color: red;cursor:pointer" title="Delete"></i>
+            <!-- <button>Edit</button>
+                    <button>Delete</button> -->
+        </div>
+        <table style="font-size:12px">
+            <tr *ngFor="let fc of fieldConfigComb.comb5">
+
+                <td>{{fc.fieldName}}</td>
+            </tr>
+        </table>
+
+    </div>
+    <div class="text-center">
+        <img class='loaderClass1' src="assets/images/loader.gif" />
+    </div>
+
+</div>

@@ -1,0 +1,358 @@
+<div class="row" style="margin:0px">
+  <div class="col-sm-12" style="background:rgba(233, 6, 6, 0.705);margin-top:5px;margin-bottom:5px;">
+    <label style="color:rgb(245, 239, 239); font-size: 16px;padding-top: 4px">PROJECT STATUS</label>
+  </div>
+</div>
+<div class="col-sm-12">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="row">
+        <!-- <div class="col-sm-1">
+        </div> -->
+        <div class="col-sm-2" style="margin-left:20px;">
+          <label>From Date</label>
+          <input id="fromDateId" type='text' class="form-control" placeholder="YYYY-MM-DD" style="height:30px;font-size:11px;border-radius:10px;width:100%"
+            bsDatepicker [bsConfig]='datePickerConfig' placement="right top" />
+        </div>
+        <div class="col-sm-2">
+          <label>To Date</label>
+          <input id="toDateId" type='text' class="form-control" placeholder="YYYY-MM-DD" style="height:30px;font-size:11px;border-radius:10px;width:100%"
+            bsDatepicker [bsConfig]='datePickerConfig' placement="right top" />
+        </div>
+        <div class="col-sm-4">
+          <label>Company Name</label>
+          <select id = "projectStatusCompId" class="form-control" [(ngModel)]="companyId" (change)="getSalesPerson('ProjectStatus')" style="height:30px;font-size:11px;border-radius:10px;width:100%">
+            <option value="" [disabled]=true>Select</option>
+            <option *ngFor="let cs of csList" [value]="cs.companyId">{{cs.companyName}}</option>
+            <option value="">All</option>
+          </select>
+        </div>
+        <div class="col-sm-3">
+          <label>Sales Person</label>
+          <select [(ngModel)]="salesPersonId" class="form-control" style="height:30px;font-size:11px;border-radius:10px;width:100%">
+            <option value="" [disabled]=true>Select</option>
+            <option *ngFor="let sp of spList" [value]="sp.personId">{{sp.personName}}</option>
+            <option value="">All</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-12" style="margin-top:10px">
+      <div class="row">
+        <div class="col-sm-2" style="margin-left:20px;">
+          <label>Category</label>
+          <select class="form-control" [(ngModel)]="projectCategory" style="height:30px;font-size:11px;border-radius:10px;width:100%">
+            <option value="" [disabled]=true>Select</option>
+            <option value="Running">Running</option>
+            <option value="Dropped">Dropped</option>
+            <option value="Completed">Completed</option>
+            <option value="">All</option>
+          </select>
+        </div>
+        <div class="col-sm-8" style="padding-top:20px;">
+          <label> &nbsp;</label>
+          <button class="btn btn-primary" (click)="OnApplyFilter()" style="height:30px;font-size:13px;border-radius:10px;width:20%">
+            Apply Filter</button>&nbsp;&nbsp;
+          <button class="btn btn-primary" (click)="OnViewChart()" style="height:30px;font-size:13px;border-radius:10px;width:20%">View Chart</button>&nbsp;&nbsp;
+          <!-- <button class="btn btn-primary" (click)="exportProjectStatusSummaryReport()" style="height:30px;font-size:13px;border-radius:10px;width:20%">
+            Summary Report</button>&nbsp;&nbsp; -->
+          <button class="btn btn-primary" (click)="exportProjectStatusReport()" style="height:30px;font-size:13px;border-radius:10px;width:20%">
+            Detail Report</button>&nbsp;&nbsp;
+
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-12" style="margin-left:20px;">
+      <h4>1. Running Project</h4>
+      <div class="row">
+        <div class="col-sm-8">
+          <table class="table" border="1">
+            <tr>
+              <!-- <th>Year</th> -->
+              <th>Country</th>
+              <th>Sales Person</th>
+              <th>No of Project</th>
+              <!-- <th>Value</th> -->
+            </tr>
+            <tr *ngFor="let r of runningTableList">
+              <!-- <td>
+                <a (click)="getRunningPieChartData(r.yearNo)">{{r.yearNo}}</a>
+              </td> -->
+              <td>{{r.countryNo}}</td>
+              <td>{{r.salesPerson}}</td>
+              <td>{{r.projectNo}}</td>
+              <!-- <td>{{r.projectValue}}</td> -->
+            </tr>
+          </table>
+        </div>
+        <!-- <div class="col-sm-4">
+          <button class="btn btn-primary" (click)="exportProjectStatusSummaryReport('Running')"> Summary Report</button>&nbsp;&nbsp;
+          <button class="btn btn-primary" (click)="exportProjectStatusReport('Running')"> Detail Report</button>
+        </div> -->
+
+      </div>
+
+      <div class="row">
+        <div class="col-sm-6" *ngIf="runningList.length !=0">
+          <canvas baseChart height="180" [chartType]="'pie'" [datasets]="runningpieChartData" [labels]="runningpieChartLabels" [options]="runningpieChartOptions"
+            [legend]="true" [colors]="runningpieChartColor">
+          </canvas>
+        </div>
+
+        <div class="col-sm-6" height="150" *ngIf="runningSalesList.length !=0">
+          <canvas baseChart [chartType]="'pie'" [datasets]="runningpieChartSalesData" [labels]="runningpieChartSalesLabels" [options]="runningpieChartSalesOptions"
+            [legend]="true" [colors]="runningpieChartSalesColor">
+          </canvas>
+        </div>
+
+
+      </div>
+    </div>
+    <br>
+    <div class="col-sm-12" style="margin-top:10px;margin-left:20px;">
+      <h4>2. Dropped Project</h4>
+      <div class="row">
+        <div class="col-sm-8">
+          <table class="table" border="1">
+            <tr>
+              <!-- <th>Year</th> -->
+              <th>Country</th>
+              <th>Sales Person</th>
+              <th>No of Project</th>
+              <!-- <th>Value</th> -->
+            </tr>
+            <tr *ngFor="let r of droppedTableList">
+              <!-- <td>
+                <a (click)="getDroppedPieChartData(r.yearNo)">{{r.yearNo}}</a>
+              </td> -->
+              <td>{{r.countryNo}}</td>
+              <td>{{r.salesPerson}}</td>
+              <td>{{r.projectNo}}</td>
+              <!-- <td>{{r.projectValue}}</td> -->
+            </tr>
+          </table>
+        </div>
+        <!-- <div class="col-sm-4">
+          <button class="btn btn-primary" (click)="exportProjectStatusSummaryReport('Dropped')"> Summary Report</button>&nbsp;&nbsp;
+          <button class="btn btn-primary" (click)="exportProjectStatusReport('Dropped')"> Detail Report</button>
+        </div> -->
+      </div>
+
+      <div class="row">
+        <div class="col-sm-6" *ngIf="droppedList.length !=0">
+          <canvas baseChart height="180" [chartType]="'pie'" [datasets]="droppedpieChartData" [labels]="droppedpieChartLabels" [options]="droppedpieChartOptions"
+            [legend]="true" [colors]="droppedpieChartColor">
+          </canvas>
+        </div>
+
+        <div class="col-sm-6" height="150" *ngIf="droppedSalesList.length !=0">
+          <canvas baseChart [chartType]="'pie'" [datasets]="droppedpieChartSalesData" [labels]="droppedpieChartSalesLabels" [options]="droppedpieChartSalesOptions"
+            [legend]="true" [colors]="droppedpieChartSalesColor">
+          </canvas>
+        </div>
+
+
+      </div>
+    </div>
+    <br>
+    <div class="col-sm-12" style="margin-top:10px;margin-left:20px">
+      <h4>3. Completed Project</h4>
+      <div class="row">
+        <div class="col-sm-8">
+          <table class="table" border="1">
+            <tr>
+              <!-- <th>Year</th> -->
+              <th>Country</th>
+              <th>Sales Person</th>
+              <th>No of Project</th>
+              <!-- <th>Value</th> -->
+            </tr>
+            <tr *ngFor="let r of completedTableList">
+              <!-- <td>
+                <a (click)="getCompletedPieChartData(r.yearNo)">{{r.yearNo}}</a>
+              </td> -->
+              <td>{{r.countryNo}}</td>
+              <td>{{r.salesPerson}}</td>
+              <td>{{r.projectNo}}</td>
+              <!-- <td>{{r.projectValue}}</td> -->
+            </tr>
+          </table>
+        </div>
+        <!-- <div class="col-sm-4">
+          <button class="btn btn-primary" (click)="exportProjectStatusSummaryReport('Completed')"> Summary Report</button>&nbsp;&nbsp;
+          <button class="btn btn-primary" (click)="exportProjectStatusReport('Completed')"> Detail Report</button>
+        </div> -->
+      </div>
+
+      <div class="row">
+        <div class="col-sm-6" *ngIf="completedList.length !=0">
+          <canvas baseChart height="180" [chartType]="'pie'" [datasets]="completedpieChartData" [labels]="completedpieChartLabels"
+            [options]="completedpieChartOptions" [legend]="true" [colors]="completedpieChartColor">
+          </canvas>
+        </div>
+
+        <div class="col-sm-6" height="150" *ngIf="completedSalesList.length !=0">
+          <canvas baseChart [chartType]="'pie'" [datasets]="completedpieChartSalesData" [labels]="completedpieChartSalesLabels" [options]="completedpieChartSalesOptions"
+            [legend]="true" [colors]="completedpieChartSalesColor">
+          </canvas>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<br>
+<div class="row" style="margin:0px">
+  <div class="col-sm-12" style="background:rgba(233, 6, 6, 0.705);margin-top:5px;margin-bottom:5px;">
+    <label style="color:rgb(245, 239, 239); font-size: 16px;padding-top: 4px">OTHERS</label>
+  </div>
+</div>
+<div class="col-sm-12">
+  <div class="col-sm-12">
+    <h4>1. Project Quoted Status</h4>
+    <div class="row">
+      <div style="margin-left:20px; width:10%;display: inline-block">
+        <label>From Date</label>
+        <input id="projectQuotedFromDateId" type='text' class="form-control" placeholder="YYYY-MM-DD" style="height:30px;font-size:11px;border-radius:10px;width:100%"
+          bsDatepicker [bsConfig]='datePickerConfig' placement = "right" />
+      </div>
+      <div style="width:10%;display: inline-block">
+        <label>To Date</label>
+        <input id="projectQuotedToDateId" type='text' class="form-control" placeholder="YYYY-MM-DD" style="height:30px;font-size:11px;border-radius:10px;width:100%"
+          bsDatepicker [bsConfig]='datePickerConfig' placement="right" />
+      </div>
+      <div style="width:30%;display: inline-block">
+        <label>Company Name</label>
+        <select id = 'projectQuotedCompId' class="form-control" [(ngModel)]="projectQuotedCompanyId" (change)="getSalesPerson('ProjectQuoted')" style="height:30px;font-size:11px;border-radius:10px;width:100%">
+          <option value="" [disabled]=true>Select</option>
+          <option *ngFor="let cs of csList" [value]="cs.companyId">{{cs.companyName}}</option>
+          <option value="">All</option>
+        </select>
+      </div>
+      <div style="width:20%;display: inline-block">
+        <label>Sales Person</label>
+        <select [(ngModel)]="projectQuotedSalesPersonId" class="form-control" style="height:30px;font-size:11px;border-radius:10px;width:100%">
+          <option value="" [disabled]=true>Select</option>
+          <option *ngFor="let sp of projectQuotedSpList" [value]="sp.personId">{{sp.personName}}</option>
+          <option value="">All</option>
+        </select>
+      </div>
+      <div style="width:25%;display: inline-block">
+          <label> &nbsp;</label>
+          <button class="btn btn-primary" (click)="viewTimewiseChart()" style="height:30px;font-size:13px;border-radius:10px;width:45%">View Chart</button>&nbsp;&nbsp;
+          <button class="btn btn-primary" (click)="exportProjectQuotedReport()" style="height:30px;font-size:13px;border-radius:10px;width:45%">
+            Report</button>&nbsp;&nbsp;
+      </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">
+        </div>
+      <div class="col-sm-6" *ngIf="monthlyStatusList.length != 0">
+        <canvas  baseChart [chartType]="'pie'" [datasets]="monthlyStatusData" [labels]="monthlyStatusLabels"
+          [options]="monthlyStatusOptions" [legend]="true" [colors]="monthlyStatusColor">
+        </canvas>
+      </div>
+      <div class="col-sm-3">
+        </div>
+    </div>
+  </div>
+
+  <br>
+  <div class="col-sm-12" style="margin-top:10px">
+    <h4>2. Deadline Wise Data</h4>
+    <div class="row">
+        <div style="margin-left:20px; width:10%;display: inline-block">
+          <label>From Date</label>
+          <input id="deadlineFromDateId" type='text' class="form-control" placeholder="YYYY-MM-DD" style="height:30px;font-size:11px;border-radius:10px;width:100%"
+            bsDatepicker [bsConfig]='datePickerConfig' placement="right" />
+        </div>
+        <div style="width:10%;display: inline-block">
+          <label>To Date</label>
+          <input id="deadlineToDateId" type='text' class="form-control" placeholder="YYYY-MM-DD" style="height:30px;font-size:11px;border-radius:10px;width:100%"
+            bsDatepicker [bsConfig]='datePickerConfig' placement="right" />
+        </div>
+        <div style="width:30%;display: inline-block">
+          <label>Company Name</label>
+          <select id = 'deadlineCompId' class="form-control" [(ngModel)]="deadlineCompanyId" (change)="getSalesPerson('Deadline')" style="height:30px;font-size:11px;border-radius:10px;width:100%">
+            <option value="" [disabled]=true>Select</option>
+            <option *ngFor="let cs of csList" [value]="cs.companyId">{{cs.companyName}}</option>
+            <option value="">All</option>
+          </select>
+        </div>
+        <div style="width:20%;display: inline-block">
+          <label>Sales Person</label>
+          <select [(ngModel)]="deadlineSalesPersonId" class="form-control" style="height:30px;font-size:11px;border-radius:10px;width:100%">
+            <option value="" [disabled]=true>Select</option>
+            <option *ngFor="let sp of deadlineSpList" [value]="sp.personId">{{sp.personName}}</option>
+            <option value="">All</option>
+          </select>
+        </div>
+        <div style="width:25%;display: inline-block">
+            <label> &nbsp;</label>
+            <button class="btn btn-primary" (click)="viewDeadlinewiseChart()" style="height:30px;font-size:13px;border-radius:10px;width:45%">View Chart</button>&nbsp;&nbsp;
+            <button class="btn btn-primary" (click)="exportDeadlineReport()" style="height:30px;font-size:13px;border-radius:10px;width:45%">
+              Report</button>&nbsp;&nbsp;
+        </div>
+      </div>
+    <div class="">
+      <div class="col-sm-3 ">
+      </div>
+      <div class="col-sm-6 " *ngIf="deadMonthStatusList.length != 0">
+        <canvas baseChart [chartType]="'pie'" [datasets]="deadMonthStatusData" [labels]="deadMonthStatusLabels"
+          [options]="deadMonthStatusOptions" [legend]="true" [colors]="deadMonthStatusColor" >
+        </canvas>
+      </div>
+      <div class="col-sm-3 ">
+        </div>
+    </div>
+  </div>
+  <br>
+  <div class="col-sm-12" style="margin-top:10px;margin-bottom: 20px">
+    <h4>3. Historic Data</h4>
+    <div class="row">
+        <div style="margin-left:20px; width:10%;display: inline-block">
+          <label>From Date</label>
+          <input id="historicFromDateId" type='text' class="form-control" placeholder="YYYY-MM-DD" style="height:30px;font-size:11px;border-radius:10px;width:100%"
+            bsDatepicker [bsConfig]='datePickerConfig' placement="right bottom" />
+        </div>
+        <div style="width:10%;display: inline-block">
+          <label>To Date</label>
+          <input id="historicToDateId" type='text' class="form-control" placeholder="YYYY-MM-DD" style="height:30px;font-size:11px;border-radius:10px;width:100%"
+            bsDatepicker [bsConfig]='datePickerConfig' placement="right bottom" />
+        </div>
+        <div style="width:30%;display: inline-block">
+          <label>Company Name</label>
+          <select id = 'historicCompId' class="form-control" [(ngModel)]="historicCompanyId" (change)="getSalesPerson('Historic')" style="height:30px;font-size:11px;border-radius:10px;width:100%">
+            <option value="" [disabled]=true>Select</option>
+            <option *ngFor="let cs of csList" [value]="cs.companyId">{{cs.companyName}}</option>
+            <option value="">All</option>
+          </select>
+        </div>
+        <div style="width:20%;display: inline-block">
+          <label>Sales Person</label>
+          <select [(ngModel)]="historicSalesPersonId" class="form-control" style="height:30px;font-size:11px;border-radius:10px;width:100%">
+            <option value="" [disabled]=true>Select</option>
+            <option *ngFor="let sp of historicSpList" [value]="sp.personId">{{sp.personName}}</option>
+            <option value="">All</option>
+          </select>
+        </div>
+        <div style="width:25%;display: inline-block">
+            <label> &nbsp;</label>
+            <!-- <button class="btn btn-primary" (click)="viewHistoricChart()" style="height:30px;font-size:13px;border-radius:10px;width:45%">View Chart</button>&nbsp;&nbsp; -->
+            <button class="btn btn-primary" (click)="exportHistoricReport()" style="height:30px;font-size:13px;border-radius:10px;width:45%">
+              Report</button>&nbsp;&nbsp;
+        </div>
+      </div>
+    <!-- <div class="row">
+      <div class="col-sm-3 "></div>
+      <div class="col-sm-5 " *ngIf="hisStatusList.length != 0">
+        <canvas baseChart [chartType]="'pie'" [datasets]="hisStatusData" [labels]="hisStatusLabels" [options]="hisStatusOptions"
+          [legend]="true" [colors]="hisStatusColor">
+        </canvas>
+      </div>
+      <div class="col-sm-4 "></div>
+    </div> -->
+  </div>
+
+</div>

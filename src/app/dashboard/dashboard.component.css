@@ -1,0 +1,16 @@
+.tabColorClass{
+background-color: rgb(194, 194, 194);
+border-radius: 10px;
+/* font-size: 18px; */
+/* font-weight: bold; */
+/* background-color: #F1F0E8; */
+/* text-align: center; */
+}
+
+.tabClass{
+    
+    background-color:#337ab7;
+    border-radius: 10px;
+    /* rgb(172, 38, 38) 
+    #337ab7*/
+}

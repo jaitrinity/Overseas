@@ -1,0 +1,10 @@
+.reportClass{
+    color: red;
+    font-size:20px;
+    /* padding-bottom:5px; */
+    margin-top:5px;
+}
+.reportTable{
+    border: 1px solid black;
+    text-align: center;
+}

@@ -1,0 +1,87 @@
+<div class="row" style="margin:0px">
+  <div class="col-sm-12" style="background:rgba(233, 6, 6, 0.705);margin-top:5px;margin-bottom:5px;">
+    <label style="color:white; font-size: 16px;padding-top: 4px;">CREATE LOGIN</label>
+  </div>
+</div>
+<div class="col-sm-12">
+    <div class="col-sm-6 form-inline" style="padding:0px">
+        <label  class="loginCreationClass" style="width:30%">CHOOSE COMPANY NAME *</label>
+        <!-- <input type="text" class="form-control" style="width:80%"> -->
+        <div class="dropdown" style="width:60%">
+          <input class="form-control" style="width:100%;font-size:12px;border-radius:15px" type="text" placeholder="Search.." id="myInput" (keyup)="filterFunction()" [(ngModel)] = "compName">
+          <div id="myDropdown" class="dropdown-content">
+            <a  style="font-size:12px" (click)="setInputValue(d.dealerName)" *ngFor="let d of dealerList">{{d.dealerName}}</a>
+      
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4 form-inline">
+          <label  class="loginCreationClass" style="width:40%">COMPANY ABBR *</label>
+          <input [(ngModel)] = "compAbbr" type="text" maxlength="10" style="width:30%;font-size:12px;border-radius:15px" class="form-control" (keypress)="companyAbbrValidation($event)" />
+        </div>
+
+</div>
+
+
+<div class="col-sm-12" >
+  <label class="loginCreationClass"> FOR ADD MORE..&nbsp;&nbsp; </label>
+  <span (click)="addLoginCreation()" style="cursor:pointer" title="Create Login">
+    <i class="fa fa-plus"></i>
+  </span>
+</div>
+
+<div class="col-sm-12">
+  <table class="table" border="1px" style="font-size:12px">
+    <tr class="text-center" *ngIf = "loginCreationList.length !=0" style="background: #c2dceb">
+      <th >ACTION</th>
+      <th >EMAIL ID</th>
+      <th >EMPLOYEE NAME</th>
+      <th >CONTACT NUMBER</th>
+      <th >EMPLOYEE ABBR</th>
+      <!-- <th class="text-center createLoginTableStyle">Address</th>
+      <th class="text-center createLoginTableStyle">Role</th> -->
+    </tr>
+    <tr *ngFor="let lc of loginCreationList; let ind = index" style="background: #eaeff2">
+      <td >
+        <span (click)="removeLoginCreation(ind)" style="cursor:pointer" title="Delete">
+          <i class="fa fa-minus"></i>
+        </span>
+      </td>
+      <td >
+        <input style="border-radius:15px" type="text" class="form-control emailId_ind" [(ngModel)]="lc.emailId" (keypress)="emailIdValidation($event,ind)" />
+      </td>
+      <td >
+        <input style="border-radius:15px" type="text" class="form-control userName_ind" [(ngModel)]="lc.userName" (keypress)="userNameValidation($event,ind)" />
+      </td>
+      <td >
+          <input style="border-radius:15px" type="text" class="form-control mobile_var" [(ngModel)]="lc.mobile" (keypress)="mobileValidation($event,ind)"  />
+        </td>
+        <td >
+            <input maxlength="5" style="border-radius:15px" type="text" class="form-control empAbbr_ind" [(ngModel)]="lc.empAbbr" (keypress)="empAbbrValidation($event,ind)"  />
+          </td>
+        <!-- <td class="text-center createLoginTableStyle">
+            <input type="text" class="form-control address_ind" [(ngModel)]="lc.address" (keypress)="addressValidation($event,ind)"  />
+          </td>
+      <td class="text-center createLoginTableStyle">
+        <select class="form-control" [(ngModel)]="lc.role">
+            <option value = "1">Super Admin</option>
+            <option value = "2">Admin</option>
+            <option value = "3">Dealer</option>
+          </select>
+      </td> -->
+    </tr>
+  </table>
+</div>
+<div class = "col-sm-2">
+  <!-- <input   type = "submit" value = "Submit"/> -->
+  <button *ngIf = "loginCreationList.length!=0" (click)="submitCreateLogin()" id="submitBtn"  type="button" style="width:60%;border-radius:15px" class='btn btn-primary'>Submit</button>
+  </div>
+
+  <div class="row" style="margin:0px">
+      <div class="col-sm-12" style="background:rgba(233, 6, 6, 0.705);margin-top:5px;margin-bottom:5px;">
+        <label style="color:white; font-size: 16px;padding-top: 4px;">VIEW LOGIN</label>
+      </div>
+</div>
+
+<ng2-smart-table [settings]="settings" [source]="viewLoginList"  (editConfirm)="onEdit($event)" (deleteConfirm)="onDelete($event)">
+  </ng2-smart-table>
